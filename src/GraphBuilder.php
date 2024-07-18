@@ -7,6 +7,7 @@ use phpDocumentor\GraphViz\Graph;
 use Illuminate\Support\Collection;
 use phpDocumentor\GraphViz\Node;
 use \Illuminate\Database\Eloquent\Model as EloquentModel;
+use Illuminate\Support\Facades\Schema;
 
 class GraphBuilder
 {
