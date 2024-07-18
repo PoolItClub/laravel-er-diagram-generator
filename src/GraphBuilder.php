@@ -34,18 +34,7 @@ class GraphBuilder
     {
         try {
 
-            $table = $model->getConnection()->getTablePrefix() . $model->getTable();
-            $schema = $model->getConnection()->getDoctrineSchemaManager($table);
-            $databasePlatform = $schema->getDatabasePlatform();
-            $databasePlatform->registerDoctrineTypeMapping('enum', 'string');
-
-            $database = null;
-
-            if (strpos($table, '.')) {
-                list($database, $table) = explode('.', $table);
-            }
-
-            return $schema->listTableColumns($table, $database);
+             return Schema::getColumns($model->getTable());
         } catch (\Throwable $e) {
         }
 
@@ -61,11 +50,11 @@ class GraphBuilder
         if (config('erd-generator.use_db_schema')) {
             $columns = $this->getTableColumnsFromModel($model);
             foreach ($columns as $column) {
-                $label = $column->getName();
+                $label = $column['name'];
                 if (config('erd-generator.use_column_types')) {
-                    $label .= ' ('.$column->getType()->getName().')';
+                    $label .= ' ('.$column['type'].')';
                 }
-                $table .= '<tr width="100%"><td port="' . $column->getName() . '" align="left" width="100%"  bgcolor="'.config('erd-generator.table.row_background_color').'"><font color="'.config('erd-generator.table.row_font_color').'" >' . $label . '</font></td></tr>' . PHP_EOL;
+                $table .= '<tr width="100%"><td port="' . $column['name'] . '" align="left" width="100%"  bgcolor="'.config('erd-generator.table.row_background_color').'"><font color="'.config('erd-generator.table.row_font_color').'" >' . $label . '</font></td></tr>' . PHP_EOL;
             }
         }
 
